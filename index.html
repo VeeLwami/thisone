@@ -6,37 +6,46 @@
     <title>Maze Game</title>
     <style>
         body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #f0f0f0;
-}
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
 
-#maze-container {
-    position: relative;
-    width: 500px; /* 10 cells * 50px each */
-    height: 500px; /* 10 cells * 50px each */
-    border: 2px solid #000;
-    display: grid;
-    grid-template-columns: repeat(10, 50px);
-    grid-template-rows: repeat(10, 50px);
-    background-color: #fff;
-}
+        #maze-container {
+            position: relative;
+            width: 90vw; /* Responsive width */
+            height: 90vw; /* Responsive height */
+            max-width: 500px; /* Max size for larger screens */
+            max-height: 500px; /* Max size for larger screens */
+            border: 2px solid #000;
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+            background-color: #fff;
+        }
 
-#maze-container div {
-    border: 1px solid #000;
-}
+        #ball {
+            position: absolute;
+            width: 9vw; /* Responsive size */
+            height: 9vw; /* Responsive size */
+            max-width: 48px; /* Max size for larger screens */
+            max-height: 48px; /* Max size for larger screens */
+            background-color: red;
+            border-radius: 50%;
+        }
 
-#ball {
-    position: absolute;
-    width: 48px;
-    height: 48px;
-    background-color: red;
-    border-radius: 50%;
-}
-
+        .goal {
+            position: absolute;
+            width: 9vw; /* Responsive size */
+            height: 9vw; /* Responsive size */
+            max-width: 50px; /* Max size for larger screens */
+            max-height: 50px; /* Max size for larger screens */
+            background-color: green;
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body>
