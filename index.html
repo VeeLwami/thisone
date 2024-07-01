@@ -62,7 +62,8 @@
         const mazeContainer = document.getElementById('maze-container');
         let ballPosition = { x: 0, y: 0 };
         let velocity = { x: 0, y: 0 };
-        let friction = 0.9; // Adjust this value to change the friction
+        let friction = 0.98; // Increased friction value
+        let maxSpeed = 0.5; // Maximum speed limit
 
         // Generate a random position for the goal
         const goalPosition = {
@@ -133,10 +134,17 @@
                 tiltY += 90;
 
                 // Adjust these values to control sensitivity
-                let sensitivity = 0.01;
+                let sensitivity = 0.01; // Decreased sensitivity
                 
+                // Update velocity based on tilt and sensitivity
                 velocity.x += (tiltY - 90) * sensitivity; // left-right tilt
                 velocity.y += (tiltX - 90) * sensitivity; // forward-backward tilt
+
+                // Limit the maximum speed
+                if (velocity.x > maxSpeed) velocity.x = maxSpeed;
+                if (velocity.x < -maxSpeed) velocity.x = -maxSpeed;
+                if (velocity.y > maxSpeed) velocity.y = maxSpeed;
+                if (velocity.y < -maxSpeed) velocity.y = -maxSpeed;
             });
         }
 
