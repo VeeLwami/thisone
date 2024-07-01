@@ -58,7 +58,7 @@
         const mazeContainer = document.getElementById('maze-container');
         let ballPosition = { x: 0, y: 0 };
         let velocity = { x: 0, y: 0 };
-        let friction = 0.1; // Adjust this value to change the friction
+        let friction = 0.9; // Adjust this value to change the friction
 
         // Generate a random position for the goal
         const goalPosition = {
@@ -74,13 +74,9 @@
 
         // Create and style the goal element
         const goal = document.createElement('div');
-        goal.style.position = 'absolute';
-        goal.style.width = '50px';
-        goal.style.height = '50px';
-        goal.style.backgroundColor = 'green';
-        goal.style.opacity = '0.5';
-        goal.style.left = `${goalPosition.x * 50}px`;
-        goal.style.top = `${goalPosition.y * 50}px`;
+        goal.className = 'goal';
+        goal.style.left = `${goalPosition.x * 10}vw`;
+        goal.style.top = `${goalPosition.y * 10}vw`;
         mazeContainer.appendChild(goal);
 
         function moveBall() {
@@ -108,7 +104,7 @@
                 velocity.y = 0;
             }
 
-            ball.style.transform = `translate(${ballPosition.x * 50}px, ${ballPosition.y * 50}px)`;
+            ball.style.transform = `translate(${ballPosition.x * 10}vw, ${ballPosition.y * 10}vw)`;
 
             // Check if the ball reaches the goal
             if (Math.floor(ballPosition.x) === goalPosition.x && Math.floor(ballPosition.y) === goalPosition.y) {
@@ -141,7 +137,6 @@
         }
 
         moveBall();
-
 
     </script>
 </body>
