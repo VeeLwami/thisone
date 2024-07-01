@@ -33,7 +33,7 @@
     position: absolute;
     width: 48px;
     height: 48px;
-    background-color: orange;
+    background-color: orangered;
     border-radius: 50%;
 }
 
@@ -49,7 +49,7 @@
 const mazeContainer = document.getElementById('maze-container');
 let ballPosition = { x: 0, y: 0 };
 let velocity = { x: 0, y: 0 };
-let friction = 0.5; // Adjust this value to change the friction
+let friction = 0.1; // Adjust this value to change the friction
 
 function moveBall() {
     ballPosition.x += velocity.x;
