@@ -119,15 +119,15 @@
                 velocity.y = 0;
             }
 
-            ball.style.transform = `translate(${ballPosition.x * 10}vw, ${ballPosition.y * 10}vw)`;
-
-            // Check if the ball reaches the goal
             if (Math.floor(ballPosition.x) === goalPosition.x && Math.floor(ballPosition.y) === goalPosition.y) {
                 alert('Goal reached!');
                 // Reset the ball position
                 ballPosition = { x: 0, y: 0 };
                 velocity = { x: 0, y: 0 };
             }
+            ball.style.transform = `translate(${ballPosition.x * 10}vw, ${ballPosition.y * 10}vw)`;
+
+            // Check if the ball reaches the goal
 
             requestAnimationFrame(moveBall);
         }
