@@ -86,7 +86,8 @@
         goal.className = 'goal';
         // Calculate the actual pixel height for the goal position
         const rowHeight = window.innerHeight / 10;
-        goal.style.left = `${goalPosition.x * 10}vw`;
+        const columnWidth = window.innerWidth / 10;
+        goal.style.left = `${goalPosition.x * columnWidth}px`;
         goal.style.top = `${goalPosition.y * rowHeight}px`; // Use pixel height
         mazeContainer.appendChild(goal);
 
