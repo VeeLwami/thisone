@@ -107,8 +107,8 @@
                     if (maze[x][y] === 1) {
                         const wall = document.createElement('div');
                         wall.className = 'wall';
-                        wall.style.left = `${x * cellSize}vmin`;
-                        wall.style.top = `${y * cellSize}vmin`;
+                        wall.style.left = `${y * cellSize}vmin`;
+                        wall.style.top = `${x * cellSize}vmin`;
                         mazeContainer.appendChild(wall);
                     }
                 }
