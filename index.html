@@ -24,6 +24,8 @@
             grid-template-rows: repeat(10, 1fr);
             background-color: #fff;
             box-sizing: border-box;
+            margin-top: 70px;
+            padding: 20px;
         }
 
         .cell {
@@ -68,12 +70,20 @@
             border-radius: 5px;
             box-shadow: 0 0 5px rgba(0,0,0,0.2);
         }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
-    <button onclick="onClick()">GIVE ME YOUR GYROSCOPE!!!</button>
-    <div id="maze-container">
-        <div id="ball"></div>
+    <div class="game-container">
+        <button onclick="onClick()">GIVE ME YOUR GYROSCOPE!!!</button>
+        <div id="maze-container">
+            <div id="ball"></div>
+        </div>
     </div>
     <div id="no-gyro-message">Gyroscope not available. Use arrow keys to move.</div>
     <script>
