@@ -275,8 +275,8 @@
         });
     }
 
-        let gyro = new Gyroscope({ frequency: 60 });
         function startGyroscope() {
+            let gyro = new Gyroscope({ frequency: 60 });
             gyro.addEventListener('reading', () => {
                 velocity.x += gyro.y * sensitivity; // left-right tilt
                 velocity.y += gyro.x * sensitivity; // forward-backward tilt
@@ -284,12 +284,10 @@
             gyro.start();
         }
 
-        function handleOrientation(event) {
-             gyro.addEventListener('reading', () => {
-                velocity.x += gyro.y * sensitivity; // left-right tilt
-                velocity.y += gyro.x * sensitivity; // forward-backward tilt
-            });
-            gyro.start();            
+        function handleOrientation(event) { 
+            velocity.x += gyro.y * sensitivity; // left-right tilt
+            velocity.y += gyro.x * sensitivity; // forward-backward tilt
+                        
         }
         
         function updateUIForNoGyroscope() {
