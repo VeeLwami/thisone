@@ -56,17 +56,48 @@
             opacity: 0.5;
             box-sizing: border-box;
         }
+
+        #no-gyro-message {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ffcc00;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body>
+    <button onclick="onClick()">GIVE ME YOUR GYROSCOPE!!!</button>
     <div id="maze-container">
         <div id="ball"></div>
     </div>
+    <div id="no-gyro-message">Gyroscope not available. Use arrow keys to move.</div>
     <script>
         const ball = document.getElementById('ball');
         const mazeContainer = document.getElementById('maze-container');
+        const noGyroMessage = document.getElementById('no-gyro-message');
         const mazeSize = 10;
         const cellSize = 9;
+
+        function onClick() {
+            if (typeof DeviceMotionEvent.requestPermission === 'function') {
+                DeviceMotionEvent.requestPermission()
+                .then((state) => {
+                    if (state === 'granted') {
+                    window.addEventListener('devicemotion', handleOrientation);
+                    } else {
+                    console.error('Request to access the orientation was rejected');
+                    }
+                })
+                .catch(console.error);
+            } else {
+                window.addEventListener('devicemotion', handleOrientation);
+            }
+        }
 
         let ballPosition = { x: 0, y: 0 };
         let velocity = { x: 0, y: 0 };
@@ -86,14 +117,20 @@
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         ];
 
-        let goalPosition = {
-            x: Math.floor(Math.random() * mazeSize),
-            y: Math.floor(Math.random() * mazeSize)
-        };
+        let goalPosition = setNewGoal();
 
-        while (goalPosition.x === 0 && goalPosition.y === 0 || maze[goalPosition.y][goalPosition.x] === 1) {
-            goalPosition.x = Math.floor(Math.random() * mazeSize);
-            goalPosition.y = Math.floor(Math.random() * mazeSize);
+        function setNewGoal() {
+            let newPos = {
+                x: Math.floor(Math.random() * mazeSize),
+                y: Math.floor(Math.random() * mazeSize)
+            };
+
+            while ((newPos.x === 0 && newPos.y === 0) || maze[newPos.y][newPos.x] === 1) {
+                newPos.x = Math.floor(Math.random() * mazeSize);
+                newPos.y = Math.floor(Math.random() * mazeSize);
+            }
+
+            return newPos;
         }
 
         const goal = document.createElement('div');
@@ -119,12 +156,13 @@
         function moveBall() {
             let newX = ballPosition.x + velocity.x;
             let newY = ballPosition.y + velocity.y;
+            console.log(newX+"---------");
 
             // Apply friction
             velocity.x *= friction;
             velocity.y *= friction;
 
-            // Check for collisions with walls
+            // Check for collisions with walls and adjust position if necessary
             if (!isWall(newX, ballPosition.y)) {
                 ballPosition.x = newX;
             } else {
@@ -138,21 +176,8 @@
             }
 
             // Boundary checks
-            if (ballPosition.x < 0) {
-                ballPosition.x = 0;
-                velocity.x = 0;
-            } else if (ballPosition.x > 9) {
-                ballPosition.x = 9;
-                velocity.x = 0;
-            }
-
-            if (ballPosition.y < 0) {
-                ballPosition.y = 0;
-                velocity.y = 0;
-            } else if (ballPosition.y > 9) {
-                ballPosition.y = 9;
-                velocity.y = 0;
-            }
+            ballPosition.x = Math.max(0, Math.min(ballPosition.x, 9));
+            ballPosition.y = Math.max(0, Math.min(ballPosition.y, 9));
 
             ball.style.transform = `translate(${ballPosition.x * cellSize}vmin, ${ballPosition.y * cellSize}vmin)`;
 
@@ -162,6 +187,10 @@
                 // Reset the ball position
                 ballPosition = { x: 0, y: 0 };
                 velocity = { x: 0, y: 0 };
+                // Set a new goal
+                goalPosition = setNewGoal();
+                goal.style.left = `${goalPosition.x * cellSize}vmin`;
+                goal.style.top = `${goalPosition.y * cellSize}vmin`;
             }
 
             requestAnimationFrame(moveBall);
@@ -196,6 +225,29 @@
             }
         }
 
+        function handleArrowKeys() {
+            window.addEventListener('keydown', (event) => {
+                switch (event.key) {
+                    case 'ArrowLeft':
+                        velocity.x -= sensitivity * 10; // Adjust sensitivity as needed
+                        event.preventDefault();
+                        break;
+                    case 'ArrowRight':
+                        velocity.x += sensitivity * 10; // Adjust sensitivity as needed
+                        event.preventDefault();
+                        break;
+                    case 'ArrowUp':
+                        velocity.y -= sensitivity * 10; // Adjust sensitivity as needed
+                        event.preventDefault();
+                        break;
+                    case 'ArrowDown':
+                        velocity.y += sensitivity * 10; // Adjust sensitivity as needed
+                        event.preventDefault();
+                        break;
+            }
+        });
+    }
+
         function startGyroscope() {
             let gyro = new Gyroscope({ frequency: 60 });
             gyro.addEventListener('reading', () => {
@@ -206,7 +258,8 @@
         }
 
         function updateUIForNoGyroscope() {
-            console.log('Gyroscope API is not supported or permission denied.');
+            noGyroMessage.style.display = 'block';
+            handleArrowKeys();
         }
 
         renderWalls();
