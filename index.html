@@ -48,6 +48,7 @@
             height: 9vmin;
             background-color: #000;
             box-sizing: border-box;
+            border: 1px solid gray;
         }
 
         .goal {
@@ -270,14 +271,21 @@
             gyro.start();
         }
 
-         function handleOrientation(event) {
-            let gyro = new Gyroscope({ frequency: 60 });
-            gyro.addEventListener('reading', () => {
-                velocity.x += gyro.y * sensitivity; // left-right tilt
-                velocity.y += gyro.x * sensitivity; // forward-backward tilt
-            });
-            gyro.start();
+        function handleOrientation(event) {
+            const { accelerationIncludingGravity } = event;
+            const threshold = 0.2; // Adjust threshold based on testing
+            let dynamicSensitivity = sensitivity;
 
+            // Filter noise by checking if movement is above a certain threshold
+            if (Math.abs(accelerationIncludingGravity.y) > threshold || Math.abs(accelerationIncludingGravity.x) > threshold) {
+                // Dynamically adjust sensitivity based on the speed of movement
+                if (Math.abs(accelerationIncludingGravity.y) > 5 || Math.abs(accelerationIncludingGravity.x) > 5) {
+                    dynamicSensitivity *= 2; // Increase sensitivity for faster movements
+                }
+
+                velocity.x += accelerationIncludingGravity.y * dynamicSensitivity;
+                velocity.y += accelerationIncludingGravity.x * dynamicSensitivity;
+            }
         }
 
         function updateUIForNoGyroscope() {
