@@ -3,95 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Maze Game</title>
+    <title>Maze Game with Walls</title>
     <style>
         body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #f0f0f0;
-}
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
 
-#maze-container {
-    position: relative;
-    border: 2px solid #000;
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    grid-template-rows: repeat(10, 1fr);
-    background-color: #fff;
-    box-sizing: border-box; 
-}
-#ball {
-    position: absolute;
-    width: 9vw; /* Responsive size */
-    height: 9vw; /* Responsive size */
-    max-width: 48px; /* Max size for larger screens */
-    max-height: 48px; /* Max size for larger screens */
-    background-color: red;
-    border-radius: 50%;
-    box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
-}
+        #maze-container {
+            position: relative;
+            border: 2px solid #000;
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+            background-color: #fff;
+            box-sizing: border-box;
+        }
 
-.goal {
-    position: absolute;
-    width: 9vw; /* Responsive size */
-    height: 9vw; /* Responsive size */
-    max-width: 48px; /* Max size for larger screens */
-    max-height: 48px; /* Max size for larger screens */
-    background-color: green;
-    opacity: 0.5;
-    box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
-}
-#gyro-data {
-    margin-top: 20px;
-    text-align: center;
-}
+        #ball {
+            position: absolute;
+            width: 9vw;
+            height: 9vw;
+            max-width: 48px;
+            max-height: 48px;
+            background-color: red;
+            border-radius: 50%;
+            box-sizing: border-box;
+        }
 
+        .wall {
+            position: absolute;
+            width: 9vw;
+            height: 9vw;
+            max-width: 48px;
+            max-height: 48px;
+            background-color: #000;
+            box-sizing: border-box;
+        }
+
+        .goal {
+            position: absolute;
+            width: 9vw;
+            height: 9vw;
+            max-width: 48px;
+            max-height: 48px;
+            background-color: green;
+            opacity: 0.5;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 <body>
-
     <div id="maze-container">
         <div id="ball"></div>
     </div>
-    
     <script>
         const ball = document.getElementById('ball');
         const mazeContainer = document.getElementById('maze-container');
-        mazeContainer.style.height=`${window.innerHeight-10}px`;
-        mazeContainer.style.width=`${window.innerWidth-10}px`;
+        const mazeSize = 10;
+        const cellSize = 9;
+        mazeContainer.style.height = `${window.innerHeight - 10}px`;
+        mazeContainer.style.width = `${window.innerWidth - 10}px`;
 
         let ballPosition = { x: 0, y: 0 };
         let velocity = { x: 0, y: 0 };
         let friction = 0.98;
-        
+        let sensitivity = 0.009;
+
+        const maze = [
+            [0, 1, 0, 0, 0, 0, 1, 0, 0, 0],
+            [0, 1, 0, 1, 1, 0, 1, 0, 1, 0],
+            [0, 1, 0, 1, 0, 0, 1, 0, 1, 0],
+            [0, 0, 0, 1, 0, 1, 0, 0, 1, 0],
+            [1, 1, 0, 1, 0, 1, 0, 1, 1, 0],
+            [0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+            [0, 1, 1, 1, 1, 1, 0, 1, 0, 1],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ];
+
         let goalPosition = {
-            x: 2+Math.floor(Math.random() * 10),
-            y: 2+Math.floor(Math.random() * 10)
+            x: Math.floor(Math.random() * mazeSize),
+            y: Math.floor(Math.random() * mazeSize)
         };
 
-        while (goalPosition.x === 0 && goalPosition.y === 0) {
-            goalPosition.x = Math.floor(Math.random() * 10);
-            goalPosition.y = Math.floor(Math.random() * 10);
+        while (goalPosition.x === 0 && goalPosition.y === 0 || maze[goalPosition.y][goalPosition.x] === 1) {
+            goalPosition.x = Math.floor(Math.random() * mazeSize);
+            goalPosition.y = Math.floor(Math.random() * mazeSize);
         }
-        
+
         const goal = document.createElement('div');
         goal.className = 'goal';
-        const rowHeight =  (window.innerHeight-10) / 10;
-        const columnWidth = (window.innerWidth-10) / 10;
-        goal.style.left = `${goalPosition.x * columnWidth}px`;
-        goal.style.top = `${goalPosition.y * rowHeight}px`; 
+        goal.style.left = `${goalPosition.x * cellSize}vw`;
+        goal.style.top = `${goalPosition.y * cellSize}vw`;
         mazeContainer.appendChild(goal);
 
+        function renderWalls() {
+            for (let y = 0; y < mazeSize; y++) {
+                for (let x = 0; x < mazeSize; x++) {
+                    if (maze[y][x] === 1) {
+                        const wall = document.createElement('div');
+                        wall.className = 'wall';
+                        wall.style.left = `${x * cellSize}vw`;
+                        wall.style.top = `${y * cellSize}vw`;
+                        mazeContainer.appendChild(wall);
+                    }
+                }
+            }
+        }
+
         function moveBall() {
-            ballPosition.x += velocity.x;
-            ballPosition.y += velocity.y;
+            let newX = ballPosition.x + velocity.x;
+            let newY = ballPosition.y + velocity.y;
 
             // Apply friction
             velocity.x *= friction;
             velocity.y *= friction;
+
+            // Check for collisions with walls
+            if (!isWall(Math.floor(newX), Math.floor(ballPosition.y))) {
+                ballPosition.x = newX;
+            } else {
+                velocity.x = 0;
+            }
+
+            if (!isWall(Math.floor(ballPosition.x), Math.floor(newY))) {
+                ballPosition.y = newY;
+            } else {
+                velocity.y = 0;
+            }
 
             // Boundary checks
             if (ballPosition.x < 0) {
@@ -110,31 +155,38 @@
                 velocity.y = 0;
             }
 
+            ball.style.transform = `translate(${ballPosition.x * cellSize}vw, ${ballPosition.y * cellSize}vw)`;
+
+            // Check if the ball reaches the goal
             if (Math.floor(ballPosition.x) === goalPosition.x && Math.floor(ballPosition.y) === goalPosition.y) {
                 alert('Goal reached!');
                 // Reset the ball position
                 ballPosition = { x: 0, y: 0 };
                 velocity = { x: 0, y: 0 };
             }
-            ball.style.transform = `translate(${ballPosition.x * 10}vw, ${ballPosition.y * 10}vw)`;
-
-            // Check if the ball reaches the goal
 
             requestAnimationFrame(moveBall);
         }
 
+        function isWall(x, y) {
+            if (x < 0 || x >= mazeSize || y < 0 || y >= mazeSize) return true;
+            return maze[y][x] === 1;
+        }
 
         function startGyroscope() {
-            let gyro = new Gyroscope({ frequency: 60 });
-            gyro.addEventListener('reading', () => {
-                // Update velocity based on gyroscope data
-                let sensitivity = 0.009;
-
-                velocity.x += gyro.y * sensitivity; // left-right tilt
-                velocity.y += gyro.x * sensitivity; // forward-backward tilt
-            });
-            gyro.start();
+            if ('Gyroscope' in window) {
+                let gyro = new Gyroscope({ frequency: 60 });
+                gyro.addEventListener('reading', () => {
+                    velocity.x += gyro.y * sensitivity; // left-right tilt
+                    velocity.y += gyro.x * sensitivity; // forward-backward tilt
+                });
+                gyro.start();
+            } else {
+                console.log('Gyroscope API is not supported in this browser.');
+            }
         }
+
+        renderWalls();
         startGyroscope();
         moveBall();
     </script>
