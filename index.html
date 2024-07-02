@@ -284,11 +284,16 @@
             gyro.start();
         }
 
-        function handleOrientation(event) { 
-            velocity.x += gyro.y * sensitivity; // left-right tilt
-            velocity.y += gyro.x * sensitivity; // forward-backward tilt
-                        
-        }
+        let maxSpeed = 0.25;
+
+        function handleOrientation(event) {
+        const y_val = event.beta;  // Tilt front-to-back
+        const z_val = event.gamma; // Tilt left-to-right
+
+        // Adjust ball velocity based on device orientation
+        ballVelY = Math.max(Math.min(y_val / 90 * maxSpeed, maxSpeed), -maxSpeed);
+        ballVelX = Math.max(Math.min(z_val / 90 * maxSpeed, maxSpeed), -maxSpeed);
+    }
         
         function updateUIForNoGyroscope() {
             noGyroMessage.style.display = 'block';
