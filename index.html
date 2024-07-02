@@ -277,8 +277,8 @@
         });
     }
 
+        let gyro = new Gyroscope({ frequency: 60 });
         function startGyroscope() {
-            let gyro = new Gyroscope({ frequency: 60 });
             gyro.addEventListener('reading', () => {
                 velocity.x += gyro.y * sensitivity; // left-right tilt
                 velocity.y += gyro.x * sensitivity; // forward-backward tilt
@@ -287,32 +287,13 @@
         }
 
         function handleOrientation(event) {
-            const { accelerationIncludingGravity } = event;
-            const threshold = 0.5; // Adjusted threshold to filter minor movements
-            let dynamicSensitivity = 0.005; // Adjusted base sensitivity for more natural movement
-
-            // Correctly map the accelerometer data to the ball's velocity
-            let accX = accelerationIncludingGravity.y; // Swap x and y axes
-            let accY = accelerationIncludingGravity.x; // Swap x and y axes
-
-            // Invert axes for Apple devices if needed
-            if (navigator.platform.startsWith('iPhone') || navigator.platform.startsWith('iPad')) {
-                accX *= -1;
-                accY *= -1;
-                dynamicSensitivity *= 0.8; // Adjust sensitivity specifically for Apple devices
-            }
-
-            // Filter noise by checking if movement is above a certain threshold
-            if (Math.abs(accY) > threshold || Math.abs(accX) > threshold) {
-                // Dynamically adjust sensitivity based on the speed of movement
-                if (Math.abs(accY) > 5 || Math.abs(accX) > 5) {
-                    dynamicSensitivity *= 1.5; // Increase sensitivity for faster movements
-                }
-
-                velocity.x += accX * dynamicSensitivity;
-                velocity.y += accY * dynamicSensitivity;
-            }
+             gyro.addEventListener('reading', () => {
+                velocity.x += gyro.y * sensitivity; // left-right tilt
+                velocity.y += gyro.x * sensitivity; // forward-backward tilt
+            });
+            gyro.start();            
         }
+        
         function updateUIForNoGyroscope() {
             noGyroMessage.style.display = 'block';
             handleArrowKeys();
