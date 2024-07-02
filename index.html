@@ -102,13 +102,14 @@
         mazeContainer.appendChild(goal);
 
         function renderWalls() {
-            for (let y = 0; y < mazeSize; y++) {
-                for (let x = 0; x < mazeSize; x++) {
-                    if (maze[y][x] === 1) {
+            for (let x = 0; x < mazeSize; x++) {
+                for (let y = 0; y < mazeSize; y++) {
+                    if (maze[x][y] === 1) {
                         const wall = document.createElement('div');
                         wall.className = 'wall';
                         wall.style.left = `${x * cellSize}vmin`;
                         wall.style.top = `${y * cellSize}vmin`;
+                        wall.style.width=`${0}vmin`;
                         mazeContainer.appendChild(wall);
                     }
                 }
