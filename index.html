@@ -136,12 +136,6 @@
 
                 velocity.x += gyro.y * sensitivity; // left-right tilt
                 velocity.y += gyro.x * sensitivity; // forward-backward tilt
-
-                /* Limit the maximum speed
-                if (velocity.x > maxSpeed) velocity.x = maxSpeed;
-                if (velocity.x < -maxSpeed) velocity.x = -maxSpeed;
-                if (velocity.y > maxSpeed) velocity.y = maxSpeed;
-                if (velocity.y < -maxSpeed) velocity.y = -maxSpeed;*/
             });
             gyro.start();
         }
