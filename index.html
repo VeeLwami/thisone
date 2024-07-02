@@ -21,9 +21,8 @@
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(10, 1fr);
     background-color: #fff;
-    box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
+    box-sizing: border-box; 
 }
-
 #ball {
     position: absolute;
     width: 9vw; /* Responsive size */
@@ -67,28 +66,25 @@
         let ballPosition = { x: 0, y: 0 };
         let velocity = { x: 0, y: 0 };
         let friction = 0.98;
-        //let maxSpeed = 0.5;
-
+        
         let goalPosition = {
             x: Math.floor(Math.random() * 10),
             y: Math.floor(Math.random() * 10)
         };
 
-        // Ensure the goal position doesn't start at (0, 0)
         while (goalPosition.x === 0 && goalPosition.y === 0) {
             goalPosition.x = Math.floor(Math.random() * 10);
             goalPosition.y = Math.floor(Math.random() * 10);
         }
 
 
-        // Create and style the goal element
+        
         const goal = document.createElement('div');
         goal.className = 'goal';
-        // Calculate the actual pixel height for the goal position
         const rowHeight =  mazeContainer.style.height / 10;
         const columnWidth = mazeContainer.style.width / 10;
         goal.style.left = `${goalPosition.x * columnWidth}px`;
-        goal.style.top = `${goalPosition.y * rowHeight-10}px`; // Use pixel height
+        goal.style.top = `${goalPosition.y * rowHeight-10}px`; 
         mazeContainer.appendChild(goal);
 
         function moveBall() {
