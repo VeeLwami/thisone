@@ -151,7 +151,6 @@
                         wall.className = 'wall';
                         wall.style.left = `${y * cellSize}vmin`;
                         wall.style.top = `${x * cellSize}vmin`;
-                        wall.style.width=1+'px';
                         mazeContainer.appendChild(wall);
                     }
                 }
@@ -202,7 +201,7 @@
 
         function isWall(x, y) {
             if (x < 0 || x >= mazeSize || y < 0 || y >= mazeSize) return true;
-            return maze[Math.floor(y)][Math.floor(x)] === 1;
+            return maze[Math.floor(x)][Math.floor(y)] === 1;
         }
 
         async function initGyroscope() {
