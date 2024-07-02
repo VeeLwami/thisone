@@ -287,8 +287,8 @@
         let maxSpeed = 0.25;
 
         function handleOrientation(event) {
-            velocity.x += event.accelerationIncludingGravity.x * sensitivity;
-            velocity.y += event.accelerationIncludingGravity.y * sensitivity;
+            velocity.x += event.accelerationIncludingGravity.y * sensitivity;
+            velocity.y += event.accelerationIncludingGravity.x * sensitivity;
         }  
         
         function updateUIForNoGyroscope() {
