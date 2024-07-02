@@ -280,11 +280,11 @@
             if (Math.abs(accelerationIncludingGravity.y) > threshold || Math.abs(accelerationIncludingGravity.x) > threshold) {
                 // Dynamically adjust sensitivity based on the speed of movement
                 if (Math.abs(accelerationIncludingGravity.y) > 5 || Math.abs(accelerationIncludingGravity.x) > 5) {
-                    dynamicSensitivity *= 2; // Increase sensitivity for faster movements
+                    dynamicSensitivity *= 1.2; // Increase sensitivity for faster movements
                 }
 
-                velocity.x += accelerationIncludingGravity.y * dynamicSensitivity;
-                velocity.y += accelerationIncludingGravity.x * dynamicSensitivity;
+                velocity.x += accelerationIncludingGravity.x * dynamicSensitivity;
+                velocity.y += accelerationIncludingGravity.y * dynamicSensitivity;
             }
         }
 
