@@ -83,6 +83,8 @@
         const mazeSize = 10;
         const cellSize = 9;
 
+
+
         function onClick() {
             if (typeof DeviceMotionEvent.requestPermission === 'function') {
                 DeviceMotionEvent.requestPermission()
@@ -98,6 +100,8 @@
                 window.addEventListener('devicemotion', handleOrientation);
             }
         }
+
+       
 
         let ballPosition = { x: 0, y: 0 };
         let velocity = { x: 0, y: 0 };
@@ -255,6 +259,14 @@
                 velocity.y += gyro.x * sensitivity; // forward-backward tilt
             });
             gyro.start();
+        }
+
+         function handleOrientation(event) {
+            const { accelerationIncludingGravity } = event;
+
+            velocity.x += accelerationIncludingGravity.x * sensitivity;
+            velocity.y += accelerationIncludingGravity.y * sensitivity;
+
         }
 
         function updateUIForNoGyroscope() {
