@@ -50,6 +50,13 @@
             box-sizing: border-box;
             border: 1px solid gray;
         }
+         .space {
+            position: absolute;
+            width: 9vmin;
+            height: 9vmin;
+            box-sizing: border-box;
+            border: 1px solid gray;
+        }
 
         .goal {
             position: absolute;
@@ -163,6 +170,12 @@
                         wall.style.left = `${y * cellSize}vmin`;
                         wall.style.top = `${x * cellSize}vmin`;
                         mazeContainer.appendChild(wall);
+                    }else{
+                        const space = document.createElement('div');
+                        space.className = 'space';
+                        space.style.left = `${y * cellSize}vmin`;
+                        space.style.top = `${x * cellSize}vmin`;
+                        mazeContainer.appendChild(space);
                     }
                 }
             }
@@ -212,7 +225,7 @@
 
         function isWall(x, y) {
             if (x < 0 || x >= mazeSize || y < 0 || y >= mazeSize) return true;
-            return maze[Math.floor(y)][Math.floor(x)] === 1;
+            return maze[Math.floor(y)][Math.floor(x)] === 1 || maze[Math.ceil(y)][Math.ceil(x)] === 1;
         }
 
         async function initGyroscope() {
