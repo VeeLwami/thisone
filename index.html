@@ -273,18 +273,29 @@
 
         function handleOrientation(event) {
             const { accelerationIncludingGravity } = event;
-            const threshold = 0.2; // Adjust threshold based on testing
-            let dynamicSensitivity = sensitivity;
+            const threshold = 0.5; // Adjusted threshold to filter minor movements
+            let dynamicSensitivity = 0.005; // Adjusted base sensitivity for more natural movement
+
+            // Invert axes for Apple devices if needed
+            let accX = accelerationIncludingGravity.x;
+            let accY = accelerationIncludingGravity.y;
+
+            // Check and adjust for device-specific orientation and sensitivity
+            if (navigator.platform.startsWith('iPhone') || navigator.platform.startsWith('iPad')) {
+                accX *= -1;
+                accY *= -1;
+                dynamicSensitivity *= 0.8; // Adjust sensitivity specifically for Apple devices
+            }
 
             // Filter noise by checking if movement is above a certain threshold
-            if (Math.abs(accelerationIncludingGravity.y) > threshold || Math.abs(accelerationIncludingGravity.x) > threshold) {
+            if (Math.abs(accY) > threshold || Math.abs(accX) > threshold) {
                 // Dynamically adjust sensitivity based on the speed of movement
-                if (Math.abs(accelerationIncludingGravity.y) > 5 || Math.abs(accelerationIncludingGravity.x) > 5) {
-                    dynamicSensitivity *= 1.2; // Increase sensitivity for faster movements
+                if (Math.abs(accY) > 5 || Math.abs(accX) > 5) {
+                    dynamicSensitivity *= 1.5; // Increase sensitivity for faster movements
                 }
 
-                velocity.x += accelerationIncludingGravity.x * dynamicSensitivity;
-                velocity.y += accelerationIncludingGravity.y * dynamicSensitivity;
+                velocity.x += accX * dynamicSensitivity;
+                velocity.y += accY * dynamicSensitivity;
             }
         }
 
