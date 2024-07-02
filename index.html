@@ -65,6 +65,11 @@
     <script>
         const ball = document.getElementById('ball');
         const mazeContainer = document.getElementById('maze-container');
+        mazeContainer.style.height=window.innerHeight;
+        mazeContainer.style.maxHeight=window.innerHeight;
+        mazeContainer.style.width=window.innerWidth;
+        mazeContainer.style.maxWidth=window.innerWidth;
+
         let ballPosition = { x: 0, y: 0 };
         let velocity = { x: 0, y: 0 };
         let friction = 0.98;
