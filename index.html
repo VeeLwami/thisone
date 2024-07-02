@@ -58,89 +58,90 @@
         <div id="ball"></div>
     </div>
     <script>
+        window.location.href = 'test.html';
         const ball = document.getElementById('ball');
-const mazeContainer = document.getElementById('maze-container');
-let ballPosition = { x: 0, y: 0 };
-let velocity = { x: 0, y: 0 };
-let friction = 0.4; // Adjust this value to change the friction
+        const mazeContainer = document.getElementById('maze-container');
+        let ballPosition = { x: 0, y: 0 };
+        let velocity = { x: 0, y: 0 };
+        let friction = 0.4; // Adjust this value to change the friction
 
-// Generate a random position for the goal
-const goalPosition = {
-    x: Math.floor(Math.random() * 10),
-    y: Math.floor(Math.random() * 10)
-};
+        // Generate a random position for the goal
+        const goalPosition = {
+            x: Math.floor(Math.random() * 10),
+            y: Math.floor(Math.random() * 10)
+        };
 
-// Ensure the goal is not at the starting position
-while (goalPosition.x === 0 && goalPosition.y === 0) {
-    goalPosition.x = Math.floor(Math.random() * 10);
-    goalPosition.y = Math.floor(Math.random() * 10);
-}
+        // Ensure the goal is not at the starting position
+        while (goalPosition.x === 0 && goalPosition.y === 0) {
+            goalPosition.x = Math.floor(Math.random() * 10);
+            goalPosition.y = Math.floor(Math.random() * 10);
+        }
 
-// Create and style the goal element
-const goal = document.createElement('div');
-goal.className = 'goal';
-goal.style.left = `${goalPosition.x * 10}vw`;
-goal.style.top = `${goalPosition.y * 10}vw`;
-mazeContainer.appendChild(goal);
+        // Create and style the goal element
+        const goal = document.createElement('div');
+        goal.className = 'goal';
+        goal.style.left = `${goalPosition.x * 10}vw`;
+        goal.style.top = `${goalPosition.y * 10}vw`;
+        mazeContainer.appendChild(goal);
 
-function moveBall() {
-    ballPosition.x += velocity.x;
-    ballPosition.y += velocity.y;
+        function moveBall() {
+            ballPosition.x += velocity.x;
+            ballPosition.y += velocity.y;
 
-    // Apply friction
-    velocity.x *= friction;
-    velocity.y *= friction;
+            // Apply friction
+            velocity.x *= friction;
+            velocity.y *= friction;
 
-    // Boundary checks
-    if (ballPosition.x < 0) {
-        ballPosition.x = 0;
-        velocity.x = 0;
-    } else if (ballPosition.x > 9) {
-        ballPosition.x = 9;
-        velocity.x = 0;
-    }
+            // Boundary checks
+            if (ballPosition.x < 0) {
+                ballPosition.x = 0;
+                velocity.x = 0;
+            } else if (ballPosition.x > 9) {
+                ballPosition.x = 9;
+                velocity.x = 0;
+            }
 
-    if (ballPosition.y < 0) {
-        ballPosition.y = 0;
-        velocity.y = 0;
-    } else if (ballPosition.y > 9) {
-        ballPosition.y = 9;
-        velocity.y = 0;
-    }
+            if (ballPosition.y < 0) {
+                ballPosition.y = 0;
+                velocity.y = 0;
+            } else if (ballPosition.y > 9) {
+                ballPosition.y = 9;
+                velocity.y = 0;
+            }
 
-    ball.style.transform = `translate(${ballPosition.x * 10}vw, ${ballPosition.y * 10}vw)`;
+            ball.style.transform = `translate(${ballPosition.x * 10}vw, ${ballPosition.y * 10}vw)`;
 
-    // Check if the ball reaches the goal
-    if (Math.floor(ballPosition.x) === goalPosition.x && Math.floor(ballPosition.y) === goalPosition.y) {
-        alert('Goal reached!');
-        // Stop the game or reset the ball position as needed
-        ballPosition = { x: 0, y: 0 };
-        velocity = { x: 0, y: 0 };
-    }
+            // Check if the ball reaches the goal
+            if (Math.floor(ballPosition.x) === goalPosition.x && Math.floor(ballPosition.y) === goalPosition.y) {
+                alert('Goal reached!');
+                // Stop the game or reset the ball position as needed
+                ballPosition = { x: 0, y: 0 };
+                velocity = { x: 0, y: 0 };
+            }
 
-    requestAnimationFrame(moveBall);
-}
+            requestAnimationFrame(moveBall);
+        }
 
-if (window.DeviceOrientationEvent) {
-    window.addEventListener('deviceorientation', function(event) {
-        let tiltX = event.beta;  // In degree in the range [-180,180]
-        let tiltY = event.gamma; // In degree in the range [-90,90]
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', function(event) {
+                let tiltX = event.beta;  // In degree in the range [-180,180]
+                let tiltY = event.gamma; // In degree in the range [-90,90]
 
-        if (tiltX > 90) { tiltX = 90 };
-        if (tiltX < -90) { tiltX = -90 };
+                if (tiltX > 90) { tiltX = 90 };
+                if (tiltX < -90) { tiltX = -90 };
 
-        tiltX += 90;
-        tiltY += 90;
+                tiltX += 90;
+                tiltY += 90;
 
-        // Adjust these values to control sensitivity
-        let sensitivity = 0.009; // Increased sensitivity
-        
-        velocity.x += (tiltY - 90) * sensitivity; // left-right tilt
-        velocity.y += (tiltX - 90) * sensitivity; // forward-backward tilt
-    });
-}
+                // Adjust these values to control sensitivity
+                let sensitivity = 0.009; // Increased sensitivity
+                
+                velocity.x += (tiltY - 90) * sensitivity; // left-right tilt
+                velocity.y += (tiltX - 90) * sensitivity; // forward-backward tilt
+            });
+        }
 
-moveBall();
+        moveBall();
 
 
     </script>

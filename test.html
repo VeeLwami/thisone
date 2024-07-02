@@ -3,9 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Test Maze Game</title>
+    <style>
+        body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+#maze-container {
+    position: relative;
+    width: 100vw; /* Responsive width */
+    height: 100vw; /* Responsive height */
+    max-width: 500px; /* Max size for larger screens */
+    max-height: 500px; /* Max size for larger screens */
+    border: 2px solid #000;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    background-color: #fff;
+    box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
+}
+
+#ball {
+    position: absolute;
+    width: 9vw; /* Responsive size */
+    height: 9vw; /* Responsive size */
+    max-width: 48px; /* Max size for larger screens */
+    max-height: 48px; /* Max size for larger screens */
+    background-color: red;
+    border-radius: 50%;
+    box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
+}
+
+.goal {
+    position: absolute;
+    width: 9vw; /* Responsive size */
+    height: 9vw; /* Responsive size */
+    max-width: 48px; /* Max size for larger screens */
+    max-height: 48px; /* Max size for larger screens */
+    background-color: green;
+    opacity: 0.5;
+    box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
+}
+#gyro-data {
+    margin-top: 20px;
+    text-align: center;
+}
+
+    </style>
 </head>
 <body>
-    <p>just testing</p>
+
+    <div id="maze-container">
+        <div id="ball"></div>
+    </div>
+    
+    <script>
+        const ball = document.getElementById('ball');
+        const mazeContainer = document.getElementById('maze-container');
+        let ballPosition = { x: 0, y: 0 };
+        let velocity = { x: 0, y: 0 };
+        let friction = 0.98;
+        //let maxSpeed = 0.5;
+
+        // Generate a random position for the goal
+        const goalPosition = {
+            x: Math.floor(Math.random() * 10),
+            y: Math.floor(Math.random() * 10)
+        };
+
+        // Ensure the goal is not at the starting position
+        while (goalPosition.x === 0 && goalPosition.y === 0) {
+            goalPosition.x = Math.floor(Math.random() * 10);
+            goalPosition.y = Math.floor(Math.random() * 10);
+        }
+
+        // Create and style the goal element
+        const goal = document.createElement('div');
+        goal.className = 'goal';
+        goal.style.left = `${goalPosition.x * 10}vw`;
+        goal.style.top = `${goalPosition.y * 10}vw`;
+        mazeContainer.appendChild(goal);
+
+        function moveBall() {
+            ballPosition.x += velocity.x;
+            ballPosition.y += velocity.y;
+
+            // Apply friction
+            velocity.x *= friction;
+            velocity.y *= friction;
+
+            // Boundary checks
+            if (ballPosition.x < 0) {
+                ballPosition.x = 0;
+                velocity.x = 0;
+            } else if (ballPosition.x > 9) {
+                ballPosition.x = 9;
+                velocity.x = 0;
+            }
+
+            if (ballPosition.y < 0) {
+                ballPosition.y = 0;
+                velocity.y = 0;
+            } else if (ballPosition.y > 9) {
+                ballPosition.y = 9;
+                velocity.y = 0;
+            }
+
+            ball.style.transform = `translate(${ballPosition.x * 10}vw, ${ballPosition.y * 10}vw)`;
+
+            // Check if the ball reaches the goal
+            if (Math.floor(ballPosition.x) === goalPosition.x && Math.floor(ballPosition.y) === goalPosition.y) {
+                alert('Goal reached!');
+                // Reset the ball position
+                ballPosition = { x: 0, y: 0 };
+                velocity = { x: 0, y: 0 };
+            }
+
+            requestAnimationFrame(moveBall);
+        }
+
+
+        function startGyroscope() {
+            let gyro = new Gyroscope({ frequency: 60 });
+            gyro.addEventListener('reading', () => {
+                // Update velocity based on gyroscope data
+                let sensitivity = 0.009;
+
+                velocity.x += gyro.y * sensitivity; // left-right tilt
+                velocity.y += gyro.x * sensitivity; // forward-backward tilt
+
+                /* Limit the maximum speed
+                if (velocity.x > maxSpeed) velocity.x = maxSpeed;
+                if (velocity.x < -maxSpeed) velocity.x = -maxSpeed;
+                if (velocity.y > maxSpeed) velocity.y = maxSpeed;
+                if (velocity.y < -maxSpeed) velocity.y = -maxSpeed;*/
+            });
+            gyro.start();
+        }
+        startGyroscope();
+        moveBall();
+    </script>
 </body>
 </html>
