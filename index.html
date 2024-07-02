@@ -160,7 +160,7 @@
         function moveBall() {
             let newX = ballPosition.x + velocity.x;
             let newY = ballPosition.y + velocity.y;
-            console.log(Math.floor(newX)+"---------");
+            console.log(Math.floor(newX)+"---------"+Math.floor(newY));
             // Apply friction
             velocity.x *= friction;
             velocity.y *= friction;
