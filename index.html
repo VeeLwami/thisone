@@ -224,6 +224,8 @@
         }
 
         function isWall(x, y) {
+            console.log(Math.ceil(y), Math.ceil(x));
+            console.log(Math.floor(y), Math.floor(x));
             if (x < 0 || x >= mazeSize || y < 0 || y >= mazeSize) return true;
             return maze[Math.ceil(y)][Math.ceil(x)] === 1;
         }
