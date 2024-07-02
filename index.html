@@ -114,9 +114,8 @@
                 }
             }
         }
-        
+
         function moveBall() {
-            ball.style.transform = `translate(${ballPosition.x * cellSize}vmin, ${ballPosition.y * cellSize}vmin)`;
             let newX = ballPosition.x + velocity.x;
             let newY = ballPosition.y + velocity.y;
 
@@ -125,13 +124,13 @@
             velocity.y *= friction;
 
             // Check for collisions with walls
-            if (!isWall(Math.floor(newX), Math.floor(ballPosition.y))) {
+            if (!isWall(newX, ballPosition.y)) {
                 ballPosition.x = newX;
             } else {
                 velocity.x = 0;
             }
 
-            if (!isWall(Math.floor(ballPosition.x), Math.floor(newY))) {
+            if (!isWall(ballPosition.x, newY)) {
                 ballPosition.y = newY;
             } else {
                 velocity.y = 0;
@@ -154,6 +153,7 @@
                 velocity.y = 0;
             }
 
+            ball.style.transform = `translate(${ballPosition.x * cellSize}vmin, ${ballPosition.y * cellSize}vmin)`;
 
             // Check if the ball reaches the goal
             if (Math.floor(ballPosition.x) === goalPosition.x && Math.floor(ballPosition.y) === goalPosition.y) {
@@ -168,24 +168,48 @@
 
         function isWall(x, y) {
             if (x < 0 || x >= mazeSize || y < 0 || y >= mazeSize) return true;
-            return maze[y][x] === 1;
+            return maze[Math.floor(y)][Math.floor(x)] === 1;
         }
 
-        function startGyroscope() {
-            if ('Gyroscope' in window) {
-                let gyro = new Gyroscope({ frequency: 60 });
-                gyro.addEventListener('reading', () => {
-                    velocity.x += gyro.y * sensitivity; // left-right tilt
-                    velocity.y += gyro.x * sensitivity; // forward-backward tilt
-                });
-                gyro.start();
-            } else {
-                console.log('Gyroscope API is not supported in this browser.');
+        async function initGyroscope() {
+            try {
+                if ('Gyroscope' in window) {
+                    const permissionStatus = await navigator.permissions.query({ name: 'gyroscope' });
+
+                    if (permissionStatus.state === 'granted') {
+                        startGyroscope();
+                    } else if (permissionStatus.state === 'prompt') {
+                        console.log('Requesting gyroscope permission...');
+                        startGyroscope();
+                    } else {
+                        console.log('Gyroscope permission is denied.');
+                        updateUIForNoGyroscope();
+                    }
+                } else {
+                    console.log('Gyroscope API is not supported in this browser.');
+                    updateUIForNoGyroscope();
+                }
+            } catch (error) {
+                console.error('Error initializing gyroscope:', error);
+                updateUIForNoGyroscope();
             }
         }
 
+        function startGyroscope() {
+            let gyro = new Gyroscope({ frequency: 60 });
+            gyro.addEventListener('reading', () => {
+                velocity.x += gyro.y * sensitivity; // left-right tilt
+                velocity.y += gyro.x * sensitivity; // forward-backward tilt
+            });
+            gyro.start();
+        }
+
+        function updateUIForNoGyroscope() {
+            console.log('Gyroscope API is not supported or permission denied.');
+        }
+
         renderWalls();
-        startGyroscope();
+        initGyroscope();
         moveBall();
     </script>
 </body>
