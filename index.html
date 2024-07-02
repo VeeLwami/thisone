@@ -16,10 +16,6 @@
 
 #maze-container {
     position: relative;
-    /*width: 100vw; 
-    height: 100vw; 
-    max-width: 500px; 
-    max-height: 500px; /* Max size for larger screens */
     border: 2px solid #000;
     display: grid;
     grid-template-columns: repeat(10, 1fr);
@@ -73,23 +69,25 @@
         let friction = 0.98;
         //let maxSpeed = 0.5;
 
-        // Generate a random position for the goal
-        const goalPosition = {
+        let goalPosition = {
             x: Math.floor(Math.random() * 10),
             y: Math.floor(Math.random() * 10)
         };
 
-        
-        while ((goalPosition.x === 0 && goalPosition.y === 0 ) || ( goalPosition.x > mazeContainer.style.width) || goalPosition.y>mazeContainer.style.height) {
+        // Ensure the goal position doesn't start at (0, 0)
+        while (goalPosition.x === 0 && goalPosition.y === 0) {
             goalPosition.x = Math.floor(Math.random() * 10);
             goalPosition.y = Math.floor(Math.random() * 10);
         }
 
+
         // Create and style the goal element
         const goal = document.createElement('div');
         goal.className = 'goal';
-        goal.style.left = `${goalPosition.x *10}px`;
-        goal.style.top = `${goalPosition.y*10}px`;
+        // Calculate the actual pixel height for the goal position
+        const rowHeight = window.innerHeight / 10;
+        goal.style.left = `${goalPosition.x * 10}vw`;
+        goal.style.top = `${goalPosition.y * rowHeight}px`; // Use pixel height
         mazeContainer.appendChild(goal);
 
         function moveBall() {
