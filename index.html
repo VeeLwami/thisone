@@ -225,7 +225,7 @@
 
         function isWall(x, y) {
             if (x < 0 || x >= mazeSize || y < 0 || y >= mazeSize) return true;
-            return maze[Math.floor(y)][Math.floor(x)] === 1 || maze[Math.ceil(y)][Math.ceil(x)] === 1;
+            return maze[Math.ceil(y)][Math.ceil(x)] === 1;
         }
 
         async function initGyroscope() {
