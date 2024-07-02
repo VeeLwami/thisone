@@ -28,7 +28,7 @@
 
         .cell {
             box-sizing: border-box;
-            border: 1px solid gray;
+            border: 1px solid black;
         }
 
         #ball {
@@ -160,8 +160,11 @@
         function moveBall() {
             let newX = ballPosition.x + velocity.x;
             let newY = ballPosition.y + velocity.y;
+<<<<<<< HEAD
+======= console.log(newX+"---------");
             console.log(newX+"---------");
 
+>>>>>>> ca63bb67cb2dcefd2f13e7bd82dd5b571ff9876e
             // Apply friction
             velocity.x *= friction;
             velocity.y *= friction;
