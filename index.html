@@ -289,11 +289,11 @@
             const threshold = 0.5; // Adjusted threshold to filter minor movements
             let dynamicSensitivity = 0.005; // Adjusted base sensitivity for more natural movement
 
-            // Invert axes for Apple devices if needed
-            let accX = accelerationIncludingGravity.x;
-            let accY = accelerationIncludingGravity.y;
+            // Correctly map the accelerometer data to the ball's velocity
+            let accX = accelerationIncludingGravity.y; // Swap x and y axes
+            let accY = accelerationIncludingGravity.x; // Swap x and y axes
 
-            // Check and adjust for device-specific orientation and sensitivity
+            // Invert axes for Apple devices if needed
             if (navigator.platform.startsWith('iPhone') || navigator.platform.startsWith('iPad')) {
                 accX *= -1;
                 accY *= -1;
@@ -311,7 +311,6 @@
                 velocity.y += accY * dynamicSensitivity;
             }
         }
-
         function updateUIForNoGyroscope() {
             noGyroMessage.style.display = 'block';
             handleArrowKeys();
