@@ -62,7 +62,7 @@
 const mazeContainer = document.getElementById('maze-container');
 let ballPosition = { x: 0, y: 0 };
 let velocity = { x: 0, y: 0 };
-let friction = 0.9; // Adjust this value to change the friction
+let friction = 0.4; // Adjust this value to change the friction
 
 // Generate a random position for the goal
 const goalPosition = {
@@ -133,7 +133,7 @@ if (window.DeviceOrientationEvent) {
         tiltY += 90;
 
         // Adjust these values to control sensitivity
-        let sensitivity = 0.05; // Increased sensitivity
+        let sensitivity = 0.009; // Increased sensitivity
         
         velocity.x += (tiltY - 90) * sensitivity; // left-right tilt
         velocity.y += (tiltX - 90) * sensitivity; // forward-backward tilt
