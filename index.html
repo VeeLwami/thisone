@@ -61,8 +61,8 @@
     <script>
         const ball = document.getElementById('ball');
         const mazeContainer = document.getElementById('maze-container');
-        mazeContainer.style.height=`${window.innerHeight}px`;
-        mazeContainer.style.width=`${window.innerWidth}px`;
+        mazeContainer.style.height=`${window.innerHeight-10}px`;
+        mazeContainer.style.width=`${window.innerWidth-10}px`;
 
         let ballPosition = { x: 0, y: 0 };
         let velocity = { x: 0, y: 0 };
@@ -85,8 +85,8 @@
         const goal = document.createElement('div');
         goal.className = 'goal';
         // Calculate the actual pixel height for the goal position
-        const rowHeight = window.innerHeight / 10;
-        const columnWidth = window.innerWidth / 10;
+        const rowHeight =  mazeContainer.style.height / 10;
+        const columnWidth = mazeContainer.style.width / 10;
         goal.style.left = `${goalPosition.x * columnWidth}px`;
         goal.style.top = `${goalPosition.y * rowHeight-10}px`; // Use pixel height
         mazeContainer.appendChild(goal);
