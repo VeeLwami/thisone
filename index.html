@@ -81,8 +81,8 @@
             y: Math.floor(Math.random() * 10)
         };
 
-        // Ensure the goal is not at the starting position
-        while (goalPosition.x === 0 && goalPosition.y === 0) {
+        
+        while ((goalPosition.x === 0 && goalPosition.y === 0 ) || ( goalPosition.x > mazeContainer.style.maxWidth)&& goalPosition.y>mazeContainer.style.maxHeight) {
             goalPosition.x = Math.floor(Math.random() * 10);
             goalPosition.y = Math.floor(Math.random() * 10);
         }
