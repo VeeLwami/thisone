@@ -16,6 +16,8 @@
 
         #maze-container {
             position: relative;
+            width: 90vmin;
+            height: 90vmin;
             border: 2px solid #000;
             display: grid;
             grid-template-columns: repeat(10, 1fr);
@@ -24,12 +26,14 @@
             box-sizing: border-box;
         }
 
+        .cell {
+            box-sizing: border-box;
+        }
+
         #ball {
             position: absolute;
-            width: 9vw;
-            height: 9vw;
-            max-width: 48px;
-            max-height: 48px;
+            width: 9vmin;
+            height: 9vmin;
             background-color: red;
             border-radius: 50%;
             box-sizing: border-box;
@@ -37,20 +41,16 @@
 
         .wall {
             position: absolute;
-            width: 9vw;
-            height: 9vw;
-            max-width: 48px;
-            max-height: 48px;
+            width: 9vmin;
+            height: 9vmin;
             background-color: #000;
             box-sizing: border-box;
         }
 
         .goal {
             position: absolute;
-            width: 9vw;
-            height: 9vw;
-            max-width: 48px;
-            max-height: 48px;
+            width: 9vmin;
+            height: 9vmin;
             background-color: green;
             opacity: 0.5;
             box-sizing: border-box;
@@ -64,10 +64,8 @@
     <script>
         const ball = document.getElementById('ball');
         const mazeContainer = document.getElementById('maze-container');
-        const mazeSize = window.innerHeight - 10;
+        const mazeSize = 10;
         const cellSize = 9;
-        mazeContainer.style.height = `${window.innerHeight - 10}px`;
-        mazeContainer.style.width = `${window.innerWidth - 10}px`;
 
         let ballPosition = { x: 0, y: 0 };
         let velocity = { x: 0, y: 0 };
@@ -99,8 +97,8 @@
 
         const goal = document.createElement('div');
         goal.className = 'goal';
-        goal.style.left = `${goalPosition.x * cellSize}vw`;
-        goal.style.top = `${goalPosition.y * cellSize}vw`;
+        goal.style.left = `${goalPosition.x * cellSize}vmin`;
+        goal.style.top = `${goalPosition.y * cellSize}vmin`;
         mazeContainer.appendChild(goal);
 
         function renderWalls() {
@@ -109,8 +107,8 @@
                     if (maze[y][x] === 1) {
                         const wall = document.createElement('div');
                         wall.className = 'wall';
-                        wall.style.left = `${x * cellSize}vw`;
-                        wall.style.top = `${y * cellSize}vw`;
+                        wall.style.left = `${x * cellSize}vmin`;
+                        wall.style.top = `${y * cellSize}vmin`;
                         mazeContainer.appendChild(wall);
                     }
                 }
@@ -155,7 +153,7 @@
                 velocity.y = 0;
             }
 
-            ball.style.transform = `translate(${ballPosition.x * cellSize}vw, ${ballPosition.y * cellSize}vw)`;
+            ball.style.transform = `translate(${ballPosition.x * cellSize}vmin, ${ballPosition.y * cellSize}vmin)`;
 
             // Check if the ball reaches the goal
             if (Math.floor(ballPosition.x) === goalPosition.x && Math.floor(ballPosition.y) === goalPosition.y) {
