@@ -114,8 +114,9 @@
                 }
             }
         }
-
+        
         function moveBall() {
+            ball.style.transform = `translate(${ballPosition.x * cellSize}vmin, ${ballPosition.y * cellSize}vmin)`;
             let newX = ballPosition.x + velocity.x;
             let newY = ballPosition.y + velocity.y;
 
@@ -153,7 +154,6 @@
                 velocity.y = 0;
             }
 
-            ball.style.transform = `translate(${ballPosition.x * cellSize}vmin, ${ballPosition.y * cellSize}vmin)`;
 
             // Check if the ball reaches the goal
             if (Math.floor(ballPosition.x) === goalPosition.x && Math.floor(ballPosition.y) === goalPosition.y) {
