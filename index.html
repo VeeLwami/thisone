@@ -227,7 +227,7 @@
             console.log(Math.ceil(y), Math.ceil(x));
             console.log(Math.floor(y), Math.floor(x));
             if (x < 0 || x >= mazeSize || y < 0 || y >= mazeSize) return true;
-            return maze[Math.ceil(y)][Math.ceil(x)] === 1;
+            return maze[Math.ceil(y)][Math.floor(x)] === 1 || maze[Math.floor(y)][Math.ceil(x)] === 1;
         }
 
         async function initGyroscope() {
