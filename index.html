@@ -81,8 +81,8 @@
         
         const goal = document.createElement('div');
         goal.className = 'goal';
-        const rowHeight =  mazeContainer.style.height / 10;
-        const columnWidth = mazeContainer.style.width / 10;
+        const rowHeight =  (window.innerHeight-10) / 10;
+        const columnWidth = (window.innerWidth-10) / 10;
         goal.style.left = `${goalPosition.x * columnWidth}px`;
         goal.style.top = `${goalPosition.y * rowHeight-10}px`; 
         mazeContainer.appendChild(goal);
