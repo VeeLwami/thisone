@@ -68,16 +68,14 @@
         let friction = 0.98;
         
         let goalPosition = {
-            x: Math.floor(Math.random() * 10),
-            y: Math.floor(Math.random() * 10)
+            x: 20+Math.floor(Math.random() * 10),
+            y: 20+Math.floor(Math.random() * 10)
         };
 
         while (goalPosition.x === 0 && goalPosition.y === 0) {
             goalPosition.x = Math.floor(Math.random() * 10);
             goalPosition.y = Math.floor(Math.random() * 10);
         }
-
-
         
         const goal = document.createElement('div');
         goal.className = 'goal';
